@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bakımda | LGS Deneme Takibi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .bakim-kutusu {
+      background-color: rgba(255, 255, 255, 0.05);
+      padding: 40px 30px;
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+      max-width: 500px;
+      width: 100%;
+    }
+
+    .bakim-kutusu h1 {
+      font-size: 2.2em;
+      margin-bottom: 10px;
+      color: #f7c948;
+    }
+
+    .bakim-kutusu p {
+      font-size: 1.1em;
+      color: #ddd;
+    }
+
+    .spinner {
+      margin: 30px auto 10px;
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f7c948;
+      border-top: 4px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 500px) {
+      .bakim-kutusu h1 {
+        font-size: 1.6em;
+      }
+      .bakim-kutusu p {
+        font-size: 1em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bakim-kutusu">
+    <div class="spinner"></div>
+    <h1>🛠️ Site Bakımda</h1>
+    <p>Güncellemeler yapılıyor. Lütfen daha sonra tekrar ziyaret edin.</p>
+  </div>
+</body>
+</html>
