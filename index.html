@@ -178,10 +178,10 @@
     </table>
   </div>
 
+  <!-- Güncelleme yazısı tablo altına taşındı -->
+  <div id="guncelleme">Son güncelleme: 13.05.2025 15:33</div>
+
   <div id="grafikContainer" style="height: 350px; width: 100%;"></div>
-
-   <div id="guncelleme">Son güncelleme: 13.05.2025 15:33</div>
-
 
 <script>
   function toggleMode() {
@@ -218,7 +218,6 @@
   }
 
   window.onload = function () {
-    // ⬇️ Tema ayarını localStorage'dan al
     const kayitliTema = localStorage.getItem('theme');
     if (kayitliTema === 'dark') {
       document.body.classList.add('dark-mode');
