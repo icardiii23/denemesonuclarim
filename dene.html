@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LGS Deneme Takibi</title>
+  <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+  <style>
+    :root {
+      --bg-color: #f4f6f8;
+      --text-color: #333;
+      --table-bg: white;
+      --header-bg: #007bff;
+      --header-text: white;
+      --footer-bg: #f0f0f0;
+    }
+
+    body.dark-mode {
+      --bg-color: #121212;
+      --text-color: #eee;
+      --table-bg: #1e1e1e;
+      --header-bg: #333;
+      --header-text: #f7c948;
+      --footer-bg: #2a2a2a;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg-color);
+      padding: 20px;
+      margin: 0;
+      color: var(--text-color);
+      transition: background 0.3s, color 0.3s;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 1.8em;
+    }
+
+    .mode-toggle {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: var(--header-bg);
+      color: var(--header-text);
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+      margin-top: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      background: var(--table-bg);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 800px;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    th {
+      background: var(--header-bg);
+      color: var(--header-text);
+      font-size: 15px;
+    }
+
+    tfoot td {
+      font-weight: bold;
+      background: var(--footer-bg);
+    }
+
+    #guncelleme {
+      margin-top: 15px;
+      font-size: 14px;
+      text-align: center;
+      opacity: 0.7;
+    }
+
+    .highlight {
+      background-color: #c4f4cb !important;
+    }
+
+    #grafikContainer {
+      margin-top: 30px;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.5em;
+      }
+      th, td {
+        font-size: 13px;
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <button class="mode-toggle" onclick="toggleMode()">🌓 Mod Değiştir</button>
+  <h1>LGS Deneme Sonuçları</h1>
+
+  <div class="table-wrapper">
+    <table id="denemeTablosu">
+      <thead>
+        <tr>
+          <th>Deneme</th>
+          <th>Tarih</th>
+          <th>Türkçe</th>
+          <th>İnkılap</th>
+          <th>Din</th>
+          <th>İngilizce</th>
+          <th>Matematik</th>
+          <th>Fen</th>
+          <th>Puan</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>HIZ 7</td>
+          <td>11.05.2025</td>
+          <td>13,33</td>
+          <td>8,67</td>
+          <td>8,67</td>
+          <td>8,67</td>
+          <td>12,67</td>
+          <td>8,33</td>
+          <td>386,49</td>
+        </tr>
+        <tr>
+          <td>HELYUM 4</td>
+          <td>12.05.2025</td>
+          <td>12</td>
+          <td>7,33</td>
+          <td>8,67</td>
+          <td>10</td>
+          <td>15,33</td>
+          <td>12</td>
+          <td>407,36</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="2">Ortalama</td>
+          <td id="avgTurkce">-</td>
+          <td id="avgInkilap">-</td>
+          <td id="avgDin">-</td>
+          <td id="avgIngilizce">-</td>
+          <td id="avgMat">-</td>
+          <td id="avgFen">-</td>
+          <td id="avgPuan">-</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <div id="grafikContainer" style="height: 350px; width: 100%;"></div>
+  
+  <!-- Kullanıcının manuel olarak güncellemeleri yazabileceği alan -->
+  <div id="guncelleme" contenteditable="true" placeholder="Manuel olarak güncellenmiş tarih ve saati buraya yazabilirsiniz."></div>
+
+<script>
+  function toggleMode() {
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+  }
+
+  function guncelleOrtalama() {
+    document.getElementById("avgTurkce").textContent = hesaplaOrtalama(2);
+    document.getElementById("avgInkilap").textContent = hesaplaOrtalama(3);
+    document.getElementById("avgDin").textContent = hesaplaOrtalama(4);
+    document.getElementById("avgIngilizce").textContent = hesaplaOrtalama(5);
+    document.getElementById("avgMat").textContent = hesaplaOrtalama(6);
+    document.getElementById("avgFen").textContent = hesaplaOrtalama(7);
+    document.getElementById("avgPuan").textContent = hesaplaOrtalama(8);
+  }
+
+  function hesaplaOrtalama(sutun) {
+    const rows = document.querySelectorAll("#denemeTablosu tbody tr");
+    let toplam = 0;
+    let adet = 0;
+
+    rows.forEach(row => {
+      const hucre = row.cells[sutun];
+      const deger = parseFloat(hucre.textContent.replace(',', '.'));
+      if (!isNaN(deger)) {
+        toplam += deger;
+        adet++;
+      }
+    });
+
+    const ortalama = (adet > 0) ? (Math.round((toplam / adet) * 100) / 100).toFixed(2) : '-';
+    return ortalama !== '-' ? ortalama.replace('.', ',') : '-';
+  }
+
+  window.onload = function () {
+    // ⬇️ Tema ayarını localStorage'dan al
+    const kayitliTema = localStorage.getItem('theme');
+    if (kayitliTema === 'dark') {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+
+    guncelleOrtalama();
+  }
+</script>
+
+</body>
+</html>
